@@ -1,3 +1,704 @@
+:root {
+    --accent-color: #000;
+    --header-bg-min: #7f7f7f;
+    --header-bg-max: #333;
+    --switch-size: 18px;
+    --switch-border-width: 2px;
+}
+
+@media (min-width: 1024px) {
+    :root {
+        --switch-size: 24px;
+    }
+}
+
+/* == Themes */
+.theme-blue {
+    --accent-color: #3535c5;
+    --header-bg-min: #7474d6;
+    --header-bg-max: #1c1c6b;
+}
+
+.theme-red {
+    --accent-color: #c53535;
+    --header-bg-min: #c58686;
+    --header-bg-max: #862424;
+}
+
+.theme-green {
+    --accent-color: #31882f;
+    --header-bg-min: #95c793;
+    --header-bg-max: #235a22;
+}
+
+/* == General */
 * {
     box-sizing: border-box;
+}
+
+html,
+body {
+    min-height: 100%;
+}
+
+body {
+    font-family: "Roboto", sans-serif;
+    margin: 0;
+    display: grid;
+    grid-template-rows: 120px 1fr auto auto;
+}
+
+@media (min-width: 768px) {
+    body {
+        grid-template-rows: 200px 1fr auto auto;
+    }
+}
+
+form {
+    margin: 0;
+}
+
+input,
+textarea,
+button,
+select,
+a {
+    -webkit-tap-highlight-color: transparent;
+}
+
+input,
+textarea,
+button,
+select {
+    font-family: "Roboto", sans-serif;
+    font-size: inherit;
+}
+
+.container {
+    width: 90vw;
+    max-width: 75rem;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 1rem;
+    padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+    .container {
+        padding-left: 2rem;
+        padding-right: 2rem;
+    }
+}
+
+@media (min-width: 768px) {
+    .container {
+        padding-left: 3rem;
+        padding-right: 3rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .container {
+        padding-left: 3.5rem;
+        padding-right: 3.5rem;
+    }
+}
+
+/* == Section padding */
+.section-padding {
+    padding-top: 2rem;
+    padding-bottom: 2rem;
+}
+
+@media (min-width: 640px) {
+    .section-padding {
+        padding-top: 2.5rem;
+        padding-bottom: 2.5rem;
+    }
+}
+
+.section-padding + .section-padding {
+    padding-top: 0;
+}
+
+/* == Button */
+.btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.btn:focus {
+    outline: none;
+}
+
+.btn-outline {
+    border: 2px solid var(--accent-color);
+    padding: 5px 15px;
+    border-radius: 9999px;
+    color: var(--accent-color);
+    position: relative;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+@media (min-width: 1024px) {
+    .btn-outline {
+        padding: 8px 24px;
+    }
+}
+
+.btn-outline:hover,
+.btn-outline.btn-active {
+    color: #fff;
+    background-color: var(--accent-color);
+}
+
+.btn-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 24px;
+    height: 24px;
+    border-radius: 100%;
+    padding: 7px;
+    transition: background-color 0.2s ease;
+}
+
+.btn-icon:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+.btn-container {
+    display: flex;
+    flex-wrap: wrap;
+    margin: -5px -10px;
+}
+
+.btn-container .btn {
+    margin: 5px 10px;
+}
+
+/* == Count-Label */
+.count-label {
+    display: inline-block;
+    text-align: right;
+}
+
+.count-label output {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 100;
+}
+
+@media (min-width: 768px) {
+    .count-label output {
+        font-size: 3rem;
+    }
+}
+
+.count-label label {
+    display: block;
+    font-size: 0.625rem;
+    font-weight: 100;
+}
+
+@media (min-width: 768px) {
+    .count-label label {
+        font-size: 1rem;
+    }
+}
+
+.count-label + .count-label {
+    margin-left: 1.25rem;
+}
+
+/* == Date group section */
+.date-group {
+    margin-top: 2.5rem;
+}
+
+@media (min-width: 1024px) {
+    .date-group {
+        margin-top: 3.75rem;
+    }
+}
+
+.date-group h2 {
+    font-size: 1.5rem;
+    font-weight: 100;
+    margin: 0 0 0.625rem;
+}
+
+/* == Card */
+.card-deck {
+    display: grid;
+    grid-gap: 1rem;
+}
+
+@media (min-width: 640px) {
+    .card-deck {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (min-width: 1024px) {
+    .card-deck {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media (min-width: 1280px) {
+    .card-deck {
+        grid-gap: 2.5rem;
+    }
+}
+
+.card {
+    border: 2px solid var(--accent-color);
+    padding: 5px 5px 15px 20px;
+    display: grid;
+    grid-template-areas:
+        "content action"
+        "footer footer";
+}
+
+.card-completed {
+    opacity: 0.3;
+}
+
+.card-content {
+    grid-area: content;
+    padding-top: 10px;
+}
+
+.card-title {
+    display: flex;
+    font-size: 1.25rem;
+    font-weight: 300;
+    line-height: 1.1;
+    margin: 0;
+}
+
+.card-completed .card-title {
+    text-decoration: line-through;
+}
+
+.card-title .btn {
+    color: var(--accent-color);
+    flex-shrink: 0;
+    width: calc(1.25rem * 1.1);
+    height: calc(1.25rem * 1.1);
+    margin-right: 0.5rem;
+}
+
+.card-title .btn svg .checked {
+    display: none;
+}
+
+.card-completed .card-title .btn svg .checked {
+    display: block;
+}
+
+.card-description {
+    font-weight: 100;
+    margin: 0;
+}
+
+.card-action {
+    grid-area: action;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-action .btn-icon {
+    visibility: hidden;
+    opacity: 0;
+    transition: visibility 0.2s ease, opacity 0.2s ease;
+}
+
+.card:hover .card-action .btn-icon {
+    visibility: visible;
+    opacity: 1;
+}
+
+@media (hover: none) {
+    .card-action .btn-icon {
+        visibility: visible;
+        opacity: 1;
+    }
+}
+
+.card-footer {
+    grid-area: footer;
+    font-size: 0.8rem;
+}
+
+.card-date {
+    font-weight: 100;
+}
+
+/* == Form */
+.new-note-form {
+    position: relative;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 0.75rem;
+}
+
+@media (min-width: 1024px) {
+    .new-note-form {
+        font-size: 1rem;
+    }
+}
+
+.new-note-form input {
+    width: 100%;
+    border: 2px solid var(--accent-color);
+    padding: 10px 130px 10px 10px;
+    outline: none;
+    transition: box-shadow 0.2s ease;
+}
+
+@media (min-width: 1024px) {
+    .new-note-form input {
+        padding: 20px 170px 20px 20px;
+    }
+}
+
+.new-note-form input:focus {
+    box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.3);
+}
+
+.new-note-form label {
+    pointer-events: none;
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    transition: font-size 0.2s ease, top 0.2s ease;
+}
+
+@media (min-width: 1024px) {
+    .new-note-form label {
+        left: 20px;
+    }
+}
+
+.new-note-form input:focus ~ label,
+.new-note-form input:valid ~ label {
+    top: 8px;
+    font-size: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+    .new-note-form input:focus ~ label,
+    .new-note-form input:valid ~ label {
+        top: 12px;
+        font-size: 0.75rem;
+    }
+}
+
+.new-note-form .btn {
+    position: absolute;
+    top: 0;
+    right: 0;
+    height: 100%;
+    width: 120px;
+    color: #fff;
+    background-color: var(--accent-color);
+}
+
+@media (min-width: 1024px) {
+    .new-note-form .btn {
+        width: 150px;
+    }
+}
+
+/* == Switch */
+.switch {
+    display: inline-flex;
+    align-items: center;
+}
+
+.switch__input {
+    appearance: none;
+    background-color: #fff;
+    border: var(--switch-border-width) solid var(--accent-color);
+    border-radius: 9999px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 0.5rem;
+    position: relative;
+    color: var(--accent-color);
+    vertical-align: middle;
+    height: calc(var(--switch-size) + (4 * var(--switch-border-width)));
+    width: calc((2 * var(--switch-size)) + (4 * var(--switch-border-width)));
+    transition: background-color 0.25s linear 0.25s, color 0.25s linear 0.25s, border-color 0.25s linear 0.25s;
+}
+
+@media (min-width: 1024px) {
+    .switch__input {
+        font-size: 0.65rem;
+    }
+}
+
+.switch__input[type="checkbox"]:checked {
+    background-color: var(--accent-color);
+    color: #fff;
+}
+
+.switch__input::before {
+    background-color: var(--accent-color);
+    border-radius: 9999px;
+    width: var(--switch-size);
+    height: var(--switch-size);
+    position: absolute;
+    top: var(--switch-border-width);
+    left: var(--switch-border-width);
+    content: "";
+    z-index: 2;
+    transform-origin: right center;
+    transition: background-color 0.25s linear 0.25s;
+    animation: switch-off-transform 0.25s ease-out forwards;
+}
+
+.switch__input[type="checkbox"]:checked::before {
+    background-color: #fff;
+    transform-origin: left center;
+    animation: switch-on-transform 0.25s ease-out forwards;
+}
+
+.switch__input::after {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 100%;
+    line-height: 1;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    padding-right: 3px;
+    padding-left: 5px;
+    box-sizing: border-box;
+    font-weight: 100;
+    content: "OFF";
+    z-index: 1;
+}
+
+@media (min-width: 1024px) {
+    .switch__input::after {
+        padding-left: 6px;
+    }
+}
+
+.switch__input[type="checkbox"]:checked::after {
+    justify-content: flex-start;
+    content: "ON";
+}
+
+.switch__label {
+    cursor: pointer;
+    font-weight: 300;
+    font-size: 0.75rem;
+    line-height: 1;
+    margin-left: 0.5rem;
+}
+
+@media (min-width: 1024px) {
+    .switch__label {
+        font-size: 1rem;
+    }
+}
+
+@keyframes switch-on-transform {
+    0% {
+        transform: translate(0) scaleX(1);
+    }
+
+    25% {
+        transform: translate(0) scaleX(1.33);
+    }
+
+    100% {
+        transform: translate(100%) scaleX(1);
+    }
+}
+
+@keyframes switch-off-transform {
+    0% {
+        transform: translate(100%) scaleX(1);
+    }
+
+    25% {
+        transform: translate(100%) scaleX(1.33);
+    }
+
+    100% {
+        transform: translate(0) scaleX(1);
+    }
+}
+
+/* == Header */
+.header {
+    color: #fff;
+    text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
+    background: linear-gradient(351deg, var(--header-bg-min) 0%, var(--header-bg-max) 100%);
+    background-size: 400% 400%;
+    animation: backgroundAnimation 30s ease infinite;
+    overflow-x: hidden;
+    position: sticky;
+    top: 0;
+    z-index: 9999;
+}
+
+@keyframes backgroundAnimation {
+    0% {
+        background-position: 0 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0 50%;
+    }
+}
+
+.header .container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    height: 100%;
+}
+
+.header-aside {
+    position: relative;
+    align-self: stretch;
+    display: flex;
+    align-items: center;
+    padding-left: 1.25rem;
+}
+
+.header-aside::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: 50vw;
+    z-index: 1;
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.header-aside > * {
+    position: relative;
+    z-index: 2;
+}
+
+@media (min-width: 768px) {
+    .header-aside {
+        padding-left: 2.5rem;
+    }
+}
+
+@media (min-width: 1024px) {
+    .header-aside {
+        padding-left: 5rem;
+    }
+}
+
+.header-title {
+    font-size: 2rem;
+    font-weight: 100;
+    margin: 0 0 0.625rem;
+}
+
+@media (min-width: 768px) {
+    .header-title {
+        font-size: 4rem;
+        margin-bottom: 1.875rem;
+    }
+}
+
+.header-date {
+    font-size: 0.875rem;
+    font-weight: 100;
+}
+
+@media (min-width: 768px) {
+    .header-date {
+        font-size: 1rem;
+    }
+}
+
+/* == Navigation */
+.navigation {
+    padding-top: 1rem;
+}
+
+@media (min-width: 768px) {
+    .navigation {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+    }
+}
+
+.navigation-section + .navigation-section {
+    margin-top: 1.25rem;
+}
+
+@media (min-width: 768px) {
+    .navigation-section + .navigation-section {
+        margin-top: 0;
+    }
+}
+
+.navigation-label {
+    font-size: 0.75rem;
+    font-weight: 100;
+}
+
+@media (min-width: 768px) {
+    .navigation-label {
+        font-size: 0.875rem;
+    }
+}
+
+.navigation .btn-container {
+    padding-top: 5px;
+}
+
+/* == Main */
+
+/* == Footer */
+.footer {
+    font-size: 0.85rem;
+    font-weight: 100;
+    display: flex;
+    justify-content: space-between;
+}
+
+/* == Theme-Switcher */
+.theme-switch,
+.theme-switch .btn {
+    font-weight: 100;
+    font-size: 0.75rem;
+}
+
+.theme-switch {
+    text-align: right;
+}
+
+.theme-switch .btn {
+    margin-left: 0.5rem;
+}
+
+.theme-switch .btn:hover,
+.theme-switch .btn.active {
+    text-decoration: underline;
 }
