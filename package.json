@@ -1,7 +1,7 @@
 {
-  "name": "cas-fee-projekt-1-starter-template",
+  "name": "cas-fee-projekt-1",
   "version": "1.0.0",
-  "description": "Testat template",
+  "description": "CAS-FEE 2021 - Project 1 - Samuel Hauser",
   "main": "public/scripts/main.js",
   "type": "module",
   "scripts": {
@@ -12,17 +12,17 @@
     "eslint": "eslint ./source/**/*.js",
     "all": "npm run stylelint && npm run w3c  && npm run eslint  && node -e \"console.log('npm run all completed')\""
   },
-  "author": "Michael Gfeller",
+  "author": "Samuel Hauser",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^7.21.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.22.1",
-    "html-validator-cli": "^7.0.1",
-    "stylelint": "^13.12.0",
-    "stylelint-config-standard": "^21.0.0"
+    "eslint": "~7.28.0",
+    "eslint-config-airbnb-base": "~14.2.1",
+    "eslint-plugin-import": "~2.23.4",
+    "html-validator-cli": "~7.0.1",
+    "stylelint": "~13.13.1",
+    "stylelint-config-standard": "~22.0.0"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "~4.17.1"
   }
 }
