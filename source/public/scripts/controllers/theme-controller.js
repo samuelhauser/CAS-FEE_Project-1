@@ -1,5 +1,5 @@
-import ThemeModel from '../models/theme-model.js';
-import ThemeView from '../views/theme-view.js';
+import Model from '../models/theme-model.js';
+import View from '../views/theme-view.js';
 
 class ThemeController {
     constructor(model, view) {
@@ -21,4 +21,4 @@ class ThemeController {
     }
 }
 
-export default new ThemeController(new ThemeModel(), new ThemeView());
+export default new ThemeController(new Model(), new View());
