@@ -8,9 +8,10 @@
 
     <link rel="preconnect" href="https://fonts.gstatic.com"/>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap" rel="stylesheet"/>
-    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet"/>
+    <link href="https://netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet"/>
     <link rel="stylesheet" href="styles/index.css">
-    <script src="scripts/index.js" type="module"></script>
+
+    <script src="scripts/index.js" type="module" defer></script>
 </head>
 <body>
 <header class="header">
@@ -387,10 +388,10 @@
 
 <div class="theme-switch container section-padding">
     <label>Switch theme:</label>
-    <button class="btn active">default</button>
-    <button class="btn">blue</button>
-    <button class="btn">red</button>
-    <button class="btn">green</button>
+    <button class="btn active" data-theme="default">default</button>
+    <button class="btn" data-theme="blue">blue</button>
+    <button class="btn" data-theme="red">red</button>
+    <button class="btn" data-theme="green">green</button>
 </div>
 
 <footer class="footer container section-padding">
