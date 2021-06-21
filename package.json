@@ -5,7 +5,7 @@
   "main": "public/scripts/main.js",
   "type": "module",
   "scripts": {
-    "start": "node ./source/index.js",
+    "start": "nodemon ./source/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
     "stylelint": "stylelint \"./source/**/*.css\"",
     "w3c": "html-validator --file ./source/public/index.html  --verbose",
@@ -19,6 +19,7 @@
     "eslint-config-airbnb-base": "~14.2.1",
     "eslint-plugin-import": "~2.23.4",
     "html-validator-cli": "~7.0.1",
+    "nodemon": "^2.0.7",
     "stylelint": "~13.13.1",
     "stylelint-config-standard": "~22.0.0"
   },
