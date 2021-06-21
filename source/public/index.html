@@ -34,10 +34,10 @@
 </header>
 
 <main class="main container section-padding">
-    <form action="#" class="new-note-form">
+    <form action="/" class="new-note-form">
         <div class="form-field">
-            <input name="title" id="title" required class="form-control"/>
-            <label for="title" class="form-label">New things to note</label>
+            <input name="title" id="new-note-title" required class="form-control"/>
+            <label for="new-note-title" class="form-label">New things to note</label>
         </div>
         <button type="submit" class="btn btn-primary">Create new Note</button>
     </form>
@@ -398,5 +398,45 @@
     <div class="copy">© Samuel Hauser</div>
     <div class="project-name">CAS-FEE 2021</div>
 </footer>
+
+<div class="modal" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/">
+                <div class="form-field">
+                    <input name="title" id="title" required class="form-control"/>
+                    <label for="title" class="form-label">Title</label>
+                </div>
+                <div class="form-field">
+                    <textarea name="description" id="description" rows="8" required class="form-control"></textarea>
+                    <label for="description" class="form-label">Description</label>
+                </div>
+                <div class="form-field">
+                    <input name="date" id="date" type="date" required class="form-control"/>
+                    <label for="date" class="form-label">Completed until</label>
+                </div>
+                <div class="form-field">
+                    <label>Importance</label>
+                    <fieldset class="form-rating">
+                        <input type="radio" id="importance5" name="importance" value="5"/>
+                        <label for="importance5" title="Importance - 5"></label>
+                        <input type="radio" id="importance4" name="importance" value="4"/>
+                        <label for="importance4" title="Importance - 4"></label>
+                        <input type="radio" id="importance3" name="importance" value="3"/>
+                        <label for="importance3" title="Importance - 3"></label>
+                        <input type="radio" id="importance2" name="importance" value="2"/>
+                        <label for="importance2" title="Importance - 2"></label>
+                        <input type="radio" id="importance1" name="importance" value="1"/>
+                        <label for="importance1" title="Importance - 1"></label>
+                    </fieldset>
+                </div>
+                <div class="form-action">
+                    <button type="submit" class="btn btn-primary">Save Note</button>
+                    <button class="btn btn-outline">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
 </body>
 </html>
