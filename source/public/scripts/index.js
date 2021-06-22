@@ -2,7 +2,15 @@ import ThemeController from './controllers/theme-controller.js';
 
 class App {
     constructor() {
-        this.note = ThemeController;
+        this.theme = ThemeController;
+
+        this.today = document.getElementById('date-today');
+        this.displayTodayDate();
+    }
+
+    displayTodayDate() {
+        const today = new Date();
+        this.today.innerText = today.toLocaleDateString('en-US', {weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'});
     }
 }
 
