@@ -146,10 +146,9 @@ select {
     border: 2px solid var(--accent-color);
     padding: 15px 30px;
     color: var(--accent-color);
-    transition:
-        background-color 0.2s ease,
-        color 0.2s ease,
-        border-color 0.2s ease;
+    transition: background-color 0.2s ease,
+    color 0.2s ease,
+    border-color 0.2s ease;
 }
 
 .btn-outline:hover,
@@ -373,10 +372,9 @@ form {
     vertical-align: middle;
     height: calc(var(--switch-size) + (4 * var(--switch-border-width)));
     width: calc((2 * var(--switch-size)) + (4 * var(--switch-border-width)));
-    transition:
-        background-color 0.25s linear 0.25s,
-        color 0.25s linear 0.25s,
-        border-color 0.25s linear 0.25s;
+    transition: background-color 0.25s linear 0.25s,
+    color 0.25s linear 0.25s,
+    border-color 0.25s linear 0.25s;
 }
 
 @media (min-width: 1024px) {
@@ -725,12 +723,11 @@ form {
 .header {
     color: #fff;
     text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
-    background:
-        linear-gradient(
+    background: linear-gradient(
             351deg,
             var(--header-bg-min) 0%,
             var(--header-bg-max) 100%
-        );
+    );
     background-size: 400% 400%;
     animation: backgroundAnimation 30s ease infinite;
     overflow-x: hidden;
