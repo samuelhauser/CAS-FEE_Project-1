@@ -1,97 +1,21 @@
+import {httpService} from '../services/http-service.js';
 import {sortItemsBy} from '../utils/sorting.js';
 
 class NoteModel {
     constructor() {
         this.sortingStorageKey = 'note-sorting';
         this.completedStorageKey = 'note-completed';
-
-        this.notesData = [
-            {
-                id: 1,
-                title: 'My very first note',
-                description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
-                date: new Date('2021-06-21 14:00:00'),
-                importance: 2,
-                completed: false,
-                crdate: new Date('2021-06-21 10:00:00'),
-            },
-            {
-                id: 2,
-                title: 'My second note',
-                description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
-                date: new Date('2021-06-21 12:00:00'),
-                importance: 3,
-                completed: true,
-                crdate: new Date('2021-06-21 12:00:00'),
-            },
-            {
-                id: 3,
-                title: 'My third note',
-                description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
-                date: new Date('2021-06-22'),
-                importance: 1,
-                completed: false,
-                crdate: new Date('2021-06-22 12:00:00'),
-            },
-            {
-                id: 4,
-                title: 'Lorem ipsum dolor',
-                description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
-                date: new Date('2021-06-23'),
-                importance: 1,
-                completed: false,
-                crdate: new Date('2021-06-23 12:00:00'),
-            },
-            {
-                id: 5,
-                title: 'Lorem ipsum dolor',
-                description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
-                date: new Date('2021-06-20'),
-                importance: 1,
-                completed: false,
-                crdate: new Date('2021-06-20 12:00:00'),
-            },
-            {
-                id: 6,
-                title: 'Lorem ipsum dolor',
-                description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
-                date: new Date('2021-06-19'),
-                importance: 0,
-                completed: true,
-                crdate: new Date('2021-06-19 12:00:00'),
-            },
-            {
-                id: 7,
-                title: 'Lorem ipsum dolor',
-                description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
-                date: new Date('2021-06-28'),
-                importance: 1,
-                completed: false,
-                crdate: new Date('2021-06-28 12:00:00'),
-            },
-            {
-                id: 8,
-                title: 'Lorem ipsum dolor',
-                description: 'Lorem ipsum dolor sit amet, consectetuer adipiscing elit.',
-                date: new Date('2021-06-24'),
-                importance: 1,
-                completed: false,
-                crdate: new Date('2021-06-24 12:00:00'),
-            },
-        ];
+        this.notes = [];
     }
 
-    get notes() {
-        return this.notesData;
-    }
-
-    get sortedAndFilteredNotes() {
-        let filteredNodes = this.notes;
-        if (!this.completed) {
-            filteredNodes = filteredNodes.filter((note) => note.completed === false);
-        }
-        filteredNodes = sortItemsBy(filteredNodes, this.sorting);
-        return filteredNodes;
+    loadData() {
+        httpService.get('GET', '/api/notes').then((data) => {
+            this.notes = data.map((value) => {
+                const {date, crdate, ...rest} = value;
+                return {date: new Date(date), crdate: new Date(crdate), ...rest};
+            });
+            this.onNotesUpdated();
+        });
     }
 
     get sorting() {
@@ -110,6 +34,15 @@ class NoteModel {
         localStorage.setItem(this.completedStorageKey, JSON.stringify(value ? 1 : 0));
     }
 
+    get sortedAndFilteredNotes() {
+        let filteredNodes = this.notes;
+        if (!this.completed) {
+            filteredNodes = filteredNodes.filter((note) => note.completed === false);
+        }
+        filteredNodes = sortItemsBy(filteredNodes, this.sorting);
+        return filteredNodes;
+    }
+
     bindNotesUpdated(callback) {
         this.onNotesUpdated = callback;
     }
@@ -124,24 +57,61 @@ class NoteModel {
         this.onNotesUpdated();
     }
 
-    getNote(id) {
-        return this.notes.find((note) => note.id === id);
+    // eslint-disable-next-line class-methods-use-this
+    async getNote(id) {
+        const data = await httpService.get('GET', `/api/notes/${id}`);
+        const {date: newDate, crdate, ...rest} = data;
+        return {date: new Date(newDate), crdate: new Date(crdate), ...rest};
     }
 
-    createNote(title, description, date, importance) {
-        console.log('create', {title, description, date: new Date(date), importance: +importance});
+    async createNote(title, description, date, importance) {
+        const data = await httpService.get('POST', '/api/notes', {
+            title,
+            description,
+            date: new Date(date),
+            importance: +importance,
+        });
+
+        const {date: newDate, crdate, ...rest} = data;
+        this.notes.push({date: new Date(newDate), crdate: new Date(crdate), ...rest});
+        this.onNotesUpdated();
     }
 
-    updateNote(id, title, description, date, importance) {
-        console.log('update', id, {title, description, date: new Date(date), importance: +importance});
+    async updateNote(id, title, description, date, importance) {
+        const data = await httpService.get('PATCH', `/api/notes/${id}`, {
+            title,
+            description,
+            date: new Date(date),
+            importance: +importance,
+        });
+
+        const {date: newDate, crdate, ...rest} = data;
+        // eslint-disable-next-line no-underscore-dangle
+        const index = this.notes.findIndex((note) => note._id === id);
+        this.notes[index] = {date: new Date(newDate), crdate: new Date(crdate), ...rest};
+        this.onNotesUpdated();
     }
 
-    deleteNote(id) {
-        console.log('delete', id);
+    async deleteNote(id) {
+        await httpService.get('DELETE', `/api/notes/${id}`);
+
+        // eslint-disable-next-line no-underscore-dangle
+        const index = this.notes.findIndex((note) => note._id === id);
+        this.notes.splice(index, 1);
+        this.onNotesUpdated();
     }
 
-    toggleNote(id) {
-        console.log('toggle', id);
+    async toggleNote(id) {
+        const {completed} = await this.getNote(id);
+        const data = await httpService.get('PATCH', `/api/notes/${id}`, {
+            completed: !completed,
+        });
+
+        const {date: newDate, crdate, ...rest} = data;
+        // eslint-disable-next-line no-underscore-dangle
+        const index = this.notes.findIndex((note) => note._id === id);
+        this.notes[index] = {date: new Date(newDate), crdate: new Date(crdate), ...rest};
+        this.onNotesUpdated();
     }
 }
 

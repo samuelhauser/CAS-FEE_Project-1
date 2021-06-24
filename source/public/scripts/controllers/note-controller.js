@@ -7,6 +7,7 @@ class NoteController {
         this.view = view;
 
         this.model.bindNotesUpdated(this.onNoteListChanged.bind(this));
+        this.model.loadData();
 
         this.view.bindSorting(this.handleSorting.bind(this));
         this.view.bindCompleted(this.handleCompleted.bind(this));
@@ -35,29 +36,29 @@ class NoteController {
         this.model.switchCompleted(completed);
     }
 
-    handleNewNoteFormSubmit(value) {
-        this.view.openFormModal(null, value);
+    handleNewNoteFormSubmit(title) {
+        this.view.openFormModal(null, title);
     }
 
-    handleNoteFormSubmit(id = null, title, description, date, importance) {
+    async handleNoteFormSubmit(id = null, title, description, date, importance) {
         if (id == null || id.length === 0) {
-            this.model.createNote(title, description, date, importance);
+            await this.model.createNote(title, description, date, importance);
         } else {
-            this.model.updateNote(id, title, description, date, importance);
+            await this.model.updateNote(id, title, description, date, importance);
         }
     }
 
-    handleEditNote(id) {
-        const {title, description, date, importance} = this.model.getNote(id);
+    async handleEditNote(id) {
+        const {title, description, date, importance} = await this.model.getNote(id);
         this.view.openFormModal(id, title, description, date, importance);
     }
 
-    handleDeleteNote(id) {
-        this.model.deleteNote(id);
+    async handleDeleteNote(id) {
+        await this.model.deleteNote(id);
     }
 
-    handleToggleNote(id) {
-        this.model.toggleNote(id);
+    async handleToggleNote(id) {
+        await this.model.toggleNote(id);
     }
 }
 

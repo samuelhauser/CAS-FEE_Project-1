@@ -151,7 +151,7 @@ class NoteView {
     bindEditNote(handler) {
         this.noteList.addEventListener('click', (event) => {
             if (event.target.closest('[data-edit-note]')) {
-                const id = parseInt(event.target.closest('[data-edit-note]').dataset.editNote, 10);
+                const id = event.target.closest('[data-edit-note]').dataset.editNote;
                 handler(id);
             }
         });
@@ -160,7 +160,7 @@ class NoteView {
     bindDeleteNote(handler) {
         this.noteList.addEventListener('click', (event) => {
             if (event.target.closest('[data-delete-note]')) {
-                const id = parseInt(event.target.closest('[data-delete-note]').dataset.deleteNote, 10);
+                const id = event.target.closest('[data-delete-note]').dataset.deleteNote;
                 handler(id);
             }
         });
@@ -169,7 +169,7 @@ class NoteView {
     bindToggleNote(handler) {
         this.noteList.addEventListener('click', (event) => {
             if (event.target.closest('[data-toggle-note]')) {
-                const id = parseInt(event.target.closest('[data-toggle-note]').dataset.toggleNote, 10);
+                const id = event.target.closest('[data-toggle-note]').dataset.toggleNote;
                 handler(id);
             }
         });
