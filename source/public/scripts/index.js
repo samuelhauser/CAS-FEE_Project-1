@@ -1,8 +1,10 @@
 import ThemeController from './controllers/theme-controller.js';
+import NoteController from './controllers/note-controller.js';
 
 class App {
     constructor() {
         this.theme = ThemeController;
+        this.note = NoteController;
 
         this.today = document.getElementById('date-today');
         this.displayTodayDate();

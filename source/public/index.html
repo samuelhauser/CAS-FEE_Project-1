@@ -19,12 +19,68 @@
 
     <link rel="preconnect" href="https://fonts.gstatic.com"/>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;700&display=swap" rel="stylesheet">
-    <link href="styles/fontawesome.solid.min.css" rel="stylesheet">
+    <link href="styles/fontawesome.solid.css" rel="stylesheet">
     <link href="styles/index.css" rel="stylesheet">
 
+    <script src="https://cdn.jsdelivr.net/npm/handlebars@latest/dist/handlebars.js" defer></script>
     <script src="scripts/index.js" type="module"></script>
+
+    <script id="note-list-template" type="text/x-handlebars-template">
+        <section class="card-group">
+            {{#if title}}<h2>{{title}}</h2>{{/if}}
+            {{#if items}}
+                <div class="card-deck">
+                    {{#each items}}
+                        {{> note-card}}
+                    {{/each}}
+                </div>
+            {{/if}}
+        </section>
+    </script>
+
+    <script id="note-card-partial" type="text/x-handlebars-template">
+        <article class="card {{isCompleted completed}}">
+            <div class="card-content">
+                <h3 class="card-title">
+                    <button class="btn" title="Mark note as completed" data-toggle-note="{{id}}">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <path fill="currentColor" fill-rule="evenodd"
+                                  d="M19 7.685L9.995 17.25 5 11.385l.761-.649 4.271 5.016L18.272 7l.728.685z"
+                                  clip-rule="evenodd" class="checked"/>
+                            <path stroke="currentColor"
+                                  d="M12 23.5c6.351 0 11.5-5.149 11.5-11.5S18.351.5 12 .5.5 5.649.5 12 5.649 23.5 12 23.5z"/>
+                        </svg>
+                    </button>
+                    {{title}}
+                </h3>
+                <p class="card-description">{{description}}</p>
+            </div>
+            <div class="card-action">
+                <button class="btn btn-icon" title="Edit note" data-edit-note="{{id}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                        <path fill="currentColor"
+                              d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z"></path>
+                    </svg>
+                </button>
+                <button class="btn btn-icon" title="Delete note" data-delete-note="{{id}}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+                        <path fill="currentColor"
+                              d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"></path>
+                    </svg>
+                </button>
+            </div>
+            <div class="card-footer">
+                <div class="card-date">{{dateFormat date}}</div>
+                <div class="card-importance">
+                    {{#loop-until importance}}
+                        <div class="card-importance-star"></div>
+                    {{/loop-until}}
+                </div>
+            </div>
+        </article>
+    </script>
 </head>
-<body>
+<body class="empty-note-list">
 <noscript>
     <div class="no-script-warning">
         <h1>Notes App requires JavaScript</h1>
@@ -52,7 +108,7 @@
 </header>
 
 <main class="main container section-padding">
-    <form action="/" class="new-note-form">
+    <form action="/" class="new-note-form" name="newNoteForm">
         <div class="form-field">
             <input name="title" id="new-note-title" required class="form-control">
             <label for="new-note-title" class="form-label">New things to note</label>
@@ -64,344 +120,23 @@
         <div class="navigation-section">
             <label class="navigation-label">Sort by:</label>
             <div class="btn-container">
-                <button class="btn btn-outline btn-small btn-rounded btn-active">
-                    Title
-                </button>
-                <button class="btn btn-outline btn-small btn-rounded">
-                    Finish Date
-                </button>
-                <button class="btn btn-outline btn-small btn-rounded">
-                    Created Date
-                </button>
-                <button class="btn btn-outline btn-small btn-rounded">
-                    Importance
-                </button>
+                <button class="btn btn-outline btn-small btn-rounded" data-sort="title">Title</button>
+                <button class="btn btn-outline btn-small btn-rounded" data-sort="date">Finish Date</button>
+                <button class="btn btn-outline btn-small btn-rounded" data-sort="crdate">Created Date</button>
+                <button class="btn btn-outline btn-small btn-rounded" data-sort="importance">Importance</button>
             </div>
         </div>
         <div class="navigation-section">
             <label class="switch">
-                <input
-                        type="checkbox"
-                        name="finished"
-                        value="1"
-                        class="switch__input"
-                />
+                <input type="checkbox" name="completed" value="1" class="switch__input" data-completed>
                 <span class="switch__label">Show finished</span>
             </label>
         </div>
     </nav>
 
-    <section class="date-group">
-        <h2>Today</h2>
-        <div class="card-deck">
-            <article class="card">
-                <div class="card-content">
-                    <h3 class="card-title">
-                        <button class="btn" title="Mark note as completed">
-                            <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                            >
-                                <path
-                                        fill="currentColor"
-                                        fill-rule="evenodd"
-                                        d="M19 7.685L9.995 17.25 5 11.385l.761-.649 4.271 5.016L18.272 7l.728.685z"
-                                        clip-rule="evenodd"
-                                        class="checked"
-                                />
-                                <path
-                                        stroke="currentColor"
-                                        d="M12 23.5c6.351 0 11.5-5.149 11.5-11.5S18.351.5 12 .5.5 5.649.5 12 5.649 23.5 12 23.5z"
-                                />
-                            </svg>
-                        </button>
-                        This is a headline
-                    </h3>
-                    <p class="card-description">
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                    </p>
-                </div>
-                <div class="card-action">
-                    <button class="btn btn-icon" title="Edit note">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                            <path
-                                    fill="currentColor"
-                                    d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z"
-                            ></path>
-                        </svg>
-                    </button>
-                    <button class="btn btn-icon" title="Delete note">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                            <path
-                                    fill="currentColor"
-                                    d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"
-                            ></path>
-                        </svg>
-                    </button>
-                </div>
-                <div class="card-footer">
-                    <div class="card-date">July 1, 2021</div>
-                </div>
-            </article>
-            <article class="card">
-                <div class="card-content">
-                    <h3 class="card-title">
-                        <button class="btn" title="Mark note as completed">
-                            <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                            >
-                                <path
-                                        fill="currentColor"
-                                        fill-rule="evenodd"
-                                        d="M19 7.685L9.995 17.25 5 11.385l.761-.649 4.271 5.016L18.272 7l.728.685z"
-                                        clip-rule="evenodd"
-                                        class="checked"
-                                />
-                                <path
-                                        stroke="currentColor"
-                                        d="M12 23.5c6.351 0 11.5-5.149 11.5-11.5S18.351.5 12 .5.5 5.649.5 12 5.649 23.5 12 23.5z"
-                                />
-                            </svg>
-                        </button>
-                        This is a headline
-                    </h3>
-                    <p class="card-description">
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                    </p>
-                </div>
-                <div class="card-action">
-                    <button class="btn btn-icon" title="Edit note">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                            <path
-                                    fill="currentColor"
-                                    d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z"
-                            ></path>
-                        </svg>
-                    </button>
-                    <button class="btn btn-icon" title="Delete note">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                            <path
-                                    fill="currentColor"
-                                    d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"
-                            ></path>
-                        </svg>
-                    </button>
-                </div>
-                <div class="card-footer">
-                    <div class="card-date">July 1, 2021</div>
-                </div>
-            </article>
-            <article class="card">
-                <div class="card-content">
-                    <h3 class="card-title">
-                        <button class="btn" title="Mark note as completed">
-                            <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                            >
-                                <path
-                                        fill="currentColor"
-                                        fill-rule="evenodd"
-                                        d="M19 7.685L9.995 17.25 5 11.385l.761-.649 4.271 5.016L18.272 7l.728.685z"
-                                        clip-rule="evenodd"
-                                        class="checked"
-                                />
-                                <path
-                                        stroke="currentColor"
-                                        d="M12 23.5c6.351 0 11.5-5.149 11.5-11.5S18.351.5 12 .5.5 5.649.5 12 5.649 23.5 12 23.5z"
-                                />
-                            </svg>
-                        </button>
-                        This is a headline
-                    </h3>
-                    <p class="card-description">
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                    </p>
-                </div>
-                <div class="card-action">
-                    <button class="btn btn-icon" title="Edit note">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                            <path
-                                    fill="currentColor"
-                                    d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z"
-                            ></path>
-                        </svg>
-                    </button>
-                    <button class="btn btn-icon" title="Delete note">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                            <path
-                                    fill="currentColor"
-                                    d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"
-                            ></path>
-                        </svg>
-                    </button>
-                </div>
-                <div class="card-footer">
-                    <div class="card-date">July 1, 2021</div>
-                </div>
-            </article>
-        </div>
-    </section>
-
-    <section class="date-group">
-        <h2>Tomorrow</h2>
-        <div class="card-deck">
-            <article class="card">
-                <div class="card-content">
-                    <h3 class="card-title">
-                        <button class="btn" title="Mark note as completed">
-                            <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                            >
-                                <path
-                                        fill="currentColor"
-                                        fill-rule="evenodd"
-                                        d="M19 7.685L9.995 17.25 5 11.385l.761-.649 4.271 5.016L18.272 7l.728.685z"
-                                        clip-rule="evenodd"
-                                        class="checked"
-                                />
-                                <path
-                                        stroke="currentColor"
-                                        d="M12 23.5c6.351 0 11.5-5.149 11.5-11.5S18.351.5 12 .5.5 5.649.5 12 5.649 23.5 12 23.5z"
-                                />
-                            </svg>
-                        </button>
-                        This is a headline
-                    </h3>
-                    <p class="card-description">
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                    </p>
-                </div>
-                <div class="card-action">
-                    <button class="btn btn-icon" title="Edit note">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                            <path
-                                    fill="currentColor"
-                                    d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z"
-                            ></path>
-                        </svg>
-                    </button>
-                    <button class="btn btn-icon" title="Delete note">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                            <path
-                                    fill="currentColor"
-                                    d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"
-                            ></path>
-                        </svg>
-                    </button>
-                </div>
-                <div class="card-footer">
-                    <div class="card-date">July 2, 2021</div>
-                </div>
-            </article>
-            <article class="card">
-                <div class="card-content">
-                    <h3 class="card-title">
-                        <button class="btn" title="Mark note as completed">
-                            <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                            >
-                                <path
-                                        fill="currentColor"
-                                        fill-rule="evenodd"
-                                        d="M19 7.685L9.995 17.25 5 11.385l.761-.649 4.271 5.016L18.272 7l.728.685z"
-                                        clip-rule="evenodd"
-                                        class="checked"
-                                />
-                                <path
-                                        stroke="currentColor"
-                                        d="M12 23.5c6.351 0 11.5-5.149 11.5-11.5S18.351.5 12 .5.5 5.649.5 12 5.649 23.5 12 23.5z"
-                                />
-                            </svg>
-                        </button>
-                        This is a headline
-                    </h3>
-                    <p class="card-description">
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                    </p>
-                </div>
-                <div class="card-action">
-                    <button class="btn btn-icon" title="Edit note">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                            <path
-                                    fill="currentColor"
-                                    d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z"
-                            ></path>
-                        </svg>
-                    </button>
-                    <button class="btn btn-icon" title="Delete note">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                            <path
-                                    fill="currentColor"
-                                    d="M432 32H312l-9.4-18.7A24 24 0 0 0 281.1 0H166.8a23.72 23.72 0 0 0-21.4 13.3L136 32H16A16 16 0 0 0 0 48v32a16 16 0 0 0 16 16h416a16 16 0 0 0 16-16V48a16 16 0 0 0-16-16zM53.2 467a48 48 0 0 0 47.9 45h245.8a48 48 0 0 0 47.9-45L416 128H32z"
-                            ></path>
-                        </svg>
-                    </button>
-                </div>
-                <div class="card-footer">
-                    <div class="card-date">July 2, 2021</div>
-                </div>
-            </article>
-            <article class="card">
-                <div class="card-content">
-                    <h3 class="card-title">
-                        <button class="btn" title="Mark note as completed">
-                            <svg
-                                    xmlns="http://www.w3.org/2000/svg"
-                                    fill="none"
-                                    viewBox="0 0 24 24"
-                            >
-                                <path
-                                        fill="currentColor"
-                                        fill-rule="evenodd"
-                                        d="M19 7.685L9.995 17.25 5 11.385l.761-.649 4.271 5.016L18.272 7l.728.685z"
-                                        clip-rule="evenodd"
-                                        class="checked"
-                                />
-                                <path
-                                        stroke="currentColor"
-                                        d="M12 23.5c6.351 0 11.5-5.149 11.5-11.5S18.351.5 12 .5.5 5.649.5 12 5.649 23.5 12 23.5z"
-                                />
-                            </svg>
-                        </button>
-                        This is a headline
-                    </h3>
-                    <p class="card-description">
-                        Lorem ipsum dolor sit amet, consectetuer adipiscing elit.
-                    </p>
-                </div>
-                <div class="card-action">
-                    <button class="btn btn-icon" title="Edit note">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-                            <path
-                                    fill="currentColor"
-                                    d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z"
-                            ></path>
-                        </svg>
-                    </button>
-                    <button class="btn btn-icon" title="Delete note">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
-                            <path
-                                    fill="currentColor"
-                                    d="M290.74 93.24l128.02 128.02-277.99 277.99-114.14 12.6C11.35 513.54-1.56 500.62.14 485.34l12.7-114.22 277.9-277.88zm207.2-19.06l-60.11-60.11c-18.75-18.75-49.16-18.75-67.91 0l-56.55 56.55 128.02 128.02 56.55-56.55c18.75-18.76 18.75-49.16 0-67.91z"
-                            ></path>
-                        </svg>
-                    </button>
-                </div>
-                <div class="card-footer">
-                    <div class="card-date">July 2, 2021</div>
-                </div>
-            </article>
-        </div>
-    </section>
+    <div class="note-list">
+        <div class="empty-message">&gt;&gt; No notes available. Create a new one. &lt;&lt;</div>
+    </div>
 </main>
 
 <div class="theme-switch container section-padding">
@@ -420,7 +155,8 @@
 <div class="modal" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <form action="/">
+            <form action="/" name="noteForm">
+                <input type="hidden" name="note">
                 <div class="form-field">
                     <input name="title" id="title" required class="form-control">
                     <label for="title" class="form-label">Title</label>

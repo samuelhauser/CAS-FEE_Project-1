@@ -146,9 +146,7 @@ select {
     border: 2px solid var(--accent-color);
     padding: 15px 30px;
     color: var(--accent-color);
-    transition: background-color 0.2s ease,
-    color 0.2s ease,
-    border-color 0.2s ease;
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 
 .btn-outline:hover,
@@ -372,9 +370,7 @@ form {
     vertical-align: middle;
     height: calc(var(--switch-size) + (4 * var(--switch-border-width)));
     width: calc((2 * var(--switch-size)) + (4 * var(--switch-border-width)));
-    transition: background-color 0.25s linear 0.25s,
-    color 0.25s linear 0.25s,
-    border-color 0.25s linear 0.25s;
+    transition: background-color 0.25s linear 0.25s, color 0.25s linear 0.25s, border-color 0.25s linear 0.25s;
 }
 
 @media (min-width: 1024px) {
@@ -514,18 +510,32 @@ form {
     margin-left: 1.25rem;
 }
 
-/* == Date group section */
-.date-group {
+/* == Empty message */
+.empty-message {
     margin-top: 2.5rem;
+    font-weight: 100;
+    font-style: italic;
+    text-align: center;
 }
 
 @media (min-width: 1024px) {
-    .date-group {
+    .empty-message {
         margin-top: 3.75rem;
     }
 }
 
-.date-group h2 {
+/* == Card group section */
+.card-group {
+    margin-top: 2.5rem;
+}
+
+@media (min-width: 1024px) {
+    .card-group {
+        margin-top: 3.75rem;
+    }
+}
+
+.card-group h2 {
     font-size: 1.5rem;
     font-weight: 100;
     margin: 0 0 0.625rem;
@@ -559,6 +569,7 @@ form {
     border: 2px solid var(--accent-color);
     padding: 5px 5px 15px 20px;
     display: grid;
+    grid-row-gap: 0.5rem;
     grid-template-areas:
         "content action"
         "footer footer";
@@ -578,7 +589,7 @@ form {
     font-size: 1.25rem;
     font-weight: 300;
     line-height: 1.1;
-    margin: 0;
+    margin: 0 0 0.5rem;
 }
 
 .card-completed .card-title {
@@ -633,10 +644,32 @@ form {
 .card-footer {
     grid-area: footer;
     font-size: 0.8rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 15px;
 }
 
 .card-date {
     font-weight: 100;
+}
+
+.card-importance {
+    display: flex;
+}
+
+.card-importance-star {
+    color: #ffd700;
+    font-family: "Font Awesome 5 Free"; /* stylelint-disable-line font-family-no-missing-generic-family-keyword */
+    font-weight: 900;
+}
+
+.card-completed .card-importance-star {
+    color: #ddd;
+}
+
+.card-importance-star::before {
+    content: "\f005";
 }
 
 /* == Modal */
@@ -723,11 +756,7 @@ form {
 .header {
     color: #fff;
     text-shadow: 2px 2px 3px rgba(0, 0, 0, 0.3);
-    background: linear-gradient(
-            351deg,
-            var(--header-bg-min) 0%,
-            var(--header-bg-max) 100%
-    );
+    background: linear-gradient(351deg, var(--header-bg-min) 0%, var(--header-bg-max) 100%);
     background-size: 400% 400%;
     animation: backgroundAnimation 30s ease infinite;
     overflow-x: hidden;
@@ -820,6 +849,10 @@ form {
 /* == Navigation */
 .navigation {
     padding-top: 1rem;
+}
+
+.empty-note-list .navigation {
+    display: none;
 }
 
 @media (min-width: 768px) {
