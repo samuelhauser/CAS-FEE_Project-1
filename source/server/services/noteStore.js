@@ -7,20 +7,27 @@ class NoteStore {
     }
 
     async all() {
-        return this.db.find({});
+        return this.db.cfind({}).sort({title: 1}).exec();
     }
 
     async get(id) {
         return this.db.findOne({_id: id});
     }
 
-    async create(title, description) {
-        const note = new Note(title, description, new Date());
+    async create(title, description, date, importance) {
+        const note = new Note(title, description, date, importance);
         return this.db.insert(note);
     }
 
-    async update(id, {title, description}) {
-        await this.db.update({_id: id}, {$set: {title, description}});
+    async update(id, {title, description, date, importance, completed}) {
+        const updateData = {
+            ...(title === null ? null : {title}),
+            ...(description === null ? null : {description}),
+            ...(date === null ? null : {date: new Date(date)}),
+            ...(importance === null ? null : {importance}),
+            ...(completed === null ? null : {completed}),
+        };
+        await this.db.update({_id: id}, {$set: updateData});
         return this.get(id);
     }
 

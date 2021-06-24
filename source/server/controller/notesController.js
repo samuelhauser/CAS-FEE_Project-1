@@ -9,13 +9,21 @@ export const getNote = async (req, res) => {
 };
 
 export const createNote = async (req, res) => {
-    res.status(200).json((await noteStore.create(req.body.title, req.body.description)));
+    res.status(200).json((await noteStore.create(
+        req.body.title,
+        req.body.description,
+        req.body.date,
+        req.body.importance,
+    )));
 };
 
 export const updateNote = async (req, res) => {
     res.status(200).json((await noteStore.update(req.params.id, {
-        title: req.body.title,
-        description: req.body.description,
+        title: req.body.title || null,
+        description: req.body.description || null,
+        date: req.body.date || null,
+        importance: req.body.importance || null,
+        completed: typeof req.body.completed !== 'undefined' ? req.body.completed : null,
     })));
 };
 
