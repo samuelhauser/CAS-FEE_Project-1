@@ -176,7 +176,7 @@ class NoteView {
     }
 
     bindCancelModal() {
-        this.modal.querySelector('[type="button"]').addEventListener('click', (event) => {
+        this.modal.querySelector('[data-modal-close]').addEventListener('click', (event) => {
             event.preventDefault();
             this.closeFormModal();
         });
