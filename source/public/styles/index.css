@@ -129,6 +129,11 @@ select {
     outline: none;
 }
 
+.btn-text.btn-small {
+    font-size: 0.75rem;
+    font-weight: 100;
+}
+
 .btn-primary {
     color: #fff;
     background-color: var(--accent-color);
@@ -236,6 +241,10 @@ form {
     box-shadow: 0 0 10px 1px rgba(0, 0, 0, 0.3);
 }
 
+textarea.form-control {
+    resize: none;
+}
+
 .form-label {
     pointer-events: none;
     position: absolute;
@@ -316,9 +325,19 @@ form {
     display: flex;
     flex-direction: row-reverse;
     justify-content: flex-end;
+    align-items: center;
     border: none;
     margin: 0;
     padding: 0;
+}
+
+.form-rating .btn {
+    margin-left: 1rem;
+    transition: color 0.2s ease;
+}
+
+.form-rating .btn:hover {
+    color: #ffd700;
 }
 
 .form-rating > input {
@@ -596,20 +615,25 @@ form {
     text-decoration: line-through;
 }
 
+/* stylelint-disable-next-line no-descending-specificity */
 .card-title .btn {
     color: var(--accent-color);
     flex-shrink: 0;
     width: calc(1.25rem * 1.1);
     height: calc(1.25rem * 1.1);
     margin-right: 0.5rem;
+    transition: visibility 0.2s ease, opacity 0.2s ease;
 }
 
 .card-title .btn svg .checked {
-    display: none;
+    visibility: hidden;
+    opacity: 0;
 }
 
+.card-title .btn:hover svg .checked,
 .card-completed .card-title .btn svg .checked {
-    display: block;
+    visibility: visible;
+    opacity: 1;
 }
 
 .card-description {
@@ -900,7 +924,7 @@ form {
 
 /* == Theme-Switcher */
 .theme-switch,
-.theme-switch .btn {
+.theme-switch .btn { /* stylelint-disable-line no-descending-specificity */
     font-weight: 100;
     font-size: 0.75rem;
 }
@@ -909,6 +933,7 @@ form {
     text-align: right;
 }
 
+/* stylelint-disable-next-line no-descending-specificity */
 .theme-switch .btn {
     margin-left: 0.5rem;
 }

@@ -16,6 +16,7 @@ class NoteController {
         this.view.bindEditNote(this.handleEditNote.bind(this));
         this.view.bindDeleteNote(this.handleDeleteNote.bind(this));
         this.view.bindToggleNote(this.handleToggleNote.bind(this));
+        this.view.bindResetImportance();
         this.view.bindCancelModal();
         this.view.switchCompleted(this.model.completed);
 

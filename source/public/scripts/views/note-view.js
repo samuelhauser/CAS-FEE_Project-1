@@ -1,4 +1,4 @@
-import {isToday, isTomorrow, isAfterTomorrow, isBeforeToday, formatDate} from '../utils/date.js';
+import {formatDate, isAfterTomorrow, isBeforeToday, isToday, isTomorrow} from '../utils/date.js';
 
 // eslint-disable-next-line no-undef
 Handlebars.registerHelper('dateFormat', (context) => context.toLocaleDateString('en-US', {
@@ -178,6 +178,16 @@ class NoteView {
                 const id = event.target.closest('[data-toggle-note]').dataset.toggleNote;
                 handler(id);
             }
+        });
+    }
+
+    bindResetImportance() {
+        this.modal.querySelector('[data-reset-importance]').addEventListener('click', (event) => {
+            event.preventDefault();
+            this.modal.querySelectorAll('input[name="importance"]:checked').forEach((input) => {
+                // eslint-disable-next-line no-param-reassign
+                input.checked = false;
+            });
         });
     }
 
