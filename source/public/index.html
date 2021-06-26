@@ -39,10 +39,10 @@
     </script>
 
     <script id="note-card-partial" type="text/x-handlebars-template">
-        <article class="card {{isCompleted completed}}">
+        <article class="card {{completed-class completed}}">
             <div class="card-content">
                 <h3 class="card-title">
-                    <button class="btn" title="Mark note as completed" data-toggle-note="{{_id}}">
+                    <button class="btn" title="Mark note as {{completed-text completed}}" data-toggle-note="{{_id}}">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                             <path fill="currentColor" fill-rule="evenodd"
                                   d="M19 7.685L9.995 17.25 5 11.385l.761-.649 4.271 5.016L18.272 7l.728.685z"

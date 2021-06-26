@@ -7,7 +7,9 @@ Handlebars.registerHelper('dateFormat', (context) => context.toLocaleDateString(
     day: 'numeric',
 }));
 // eslint-disable-next-line no-undef
-Handlebars.registerHelper('isCompleted', (context) => (context ? 'card-completed' : null));
+Handlebars.registerHelper('completed-class', (context) => (context ? 'card-completed' : null));
+// eslint-disable-next-line no-undef
+Handlebars.registerHelper('completed-text', (context) => (context ? 'incomplete' : 'completed'));
 // eslint-disable-next-line no-undef
 Handlebars.registerHelper('loop-until', (context, options) => {
     let ret = '';
