@@ -144,10 +144,10 @@ class NoteView {
             const {note, title, description, date, importance} = this.noteFormElements;
             const dataObj = {
                 ...(note.value ? {id: note.value} : null),
-                ...(title.value ? {title: title.value} : null),
-                ...(description.value ? {description: description.value} : null),
-                ...(date.value ? {date: new Date(date.value)} : null),
-                ...(importance.value ? {importance: +importance.value} : null),
+                title: title.value || null,
+                description: description.value || null,
+                date: date.value ? new Date(date.value) : null,
+                importance: +importance.value || 0,
             };
             handler(dataObj);
             this.closeFormModal();
