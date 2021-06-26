@@ -596,6 +596,7 @@ textarea.form-control {
 
 .card-completed {
     opacity: 0.3;
+    border-color: #000;
 }
 
 .card-content {
@@ -623,6 +624,10 @@ textarea.form-control {
     height: calc(1.25rem * 1.1);
     margin-right: 0.5rem;
     transition: visibility 0.2s ease, opacity 0.2s ease;
+}
+
+.card-completed .card-title .btn {
+    color: #000;
 }
 
 .card-title .btn svg .checked {
