@@ -59,33 +59,24 @@ class NoteModel {
 
     // eslint-disable-next-line class-methods-use-this
     async getNote(id) {
-        const data = await httpService.get('GET', `/api/notes/${id}`);
-        const {date: newDate, crdate, ...rest} = data;
+        const response = await httpService.get('GET', `/api/notes/${id}`);
+        const {date: newDate, crdate, ...rest} = response;
         return {date: new Date(newDate), crdate: new Date(crdate), ...rest};
     }
 
-    async createNote(title, description, date, importance) {
-        const data = await httpService.get('POST', '/api/notes', {
-            title,
-            description,
-            date: new Date(date),
-            importance: +importance,
-        });
+    async createNote(data) {
+        const response = await httpService.get('POST', '/api/notes', data);
+        const {date: newDate, crdate, ...rest} = response;
 
-        const {date: newDate, crdate, ...rest} = data;
         this.notes.push({date: new Date(newDate), crdate: new Date(crdate), ...rest});
         this.onNotesUpdated();
     }
 
-    async updateNote(id, title, description, date, importance) {
-        const data = await httpService.get('PATCH', `/api/notes/${id}`, {
-            title,
-            description,
-            date: new Date(date),
-            importance: +importance,
-        });
+    async updateNote(data) {
+        const {id, ...updateData} = data;
+        const response = await httpService.get('PATCH', `/api/notes/${id}`, updateData);
+        const {date: newDate, crdate, ...rest} = response;
 
-        const {date: newDate, crdate, ...rest} = data;
         // eslint-disable-next-line no-underscore-dangle
         const index = this.notes.findIndex((note) => note._id === id);
         this.notes[index] = {date: new Date(newDate), crdate: new Date(crdate), ...rest};
@@ -103,11 +94,11 @@ class NoteModel {
 
     async toggleNote(id) {
         const {completed} = await this.getNote(id);
-        const data = await httpService.get('PATCH', `/api/notes/${id}`, {
+        const response = await httpService.get('PATCH', `/api/notes/${id}`, {
             completed: !completed,
         });
 
-        const {date: newDate, crdate, ...rest} = data;
+        const {date: newDate, crdate, ...rest} = response;
         // eslint-disable-next-line no-underscore-dangle
         const index = this.notes.findIndex((note) => note._id === id);
         this.notes[index] = {date: new Date(newDate), crdate: new Date(crdate), ...rest};

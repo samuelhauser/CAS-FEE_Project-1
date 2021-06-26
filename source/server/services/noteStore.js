@@ -14,20 +14,13 @@ class NoteStore {
         return this.db.findOne({_id: id});
     }
 
-    async create(title, description, date, importance) {
-        const note = new Note(title, description, date, importance);
+    async create(data) {
+        const note = new Note(data);
         return this.db.insert(note);
     }
 
-    async update(id, {title, description, date, importance, completed}) {
-        const updateData = {
-            ...(title === null ? null : {title}),
-            ...(description === null ? null : {description}),
-            ...(date === null ? null : {date: new Date(date)}),
-            ...(importance === null ? null : {importance}),
-            ...(completed === null ? null : {completed}),
-        };
-        await this.db.update({_id: id}, {$set: updateData});
+    async update(id, data) {
+        await this.db.update({_id: id}, {$set: data});
         return this.get(id);
     }
 

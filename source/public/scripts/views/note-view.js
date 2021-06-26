@@ -1,4 +1,4 @@
-import {isToday, isTomorrow, isAfterTomorrow, isBeforeToday} from '../utils/date.js';
+import {isToday, isTomorrow, isAfterTomorrow, isBeforeToday, formatDate} from '../utils/date.js';
 
 // eslint-disable-next-line no-undef
 Handlebars.registerHelper('dateFormat', (context) => context.toLocaleDateString('en-US', {
@@ -16,7 +16,6 @@ Handlebars.registerHelper('loop-until', (context, options) => {
     }
     return ret;
 });
-
 // eslint-disable-next-line no-undef
 Handlebars.registerPartial('note-card', document.getElementById('note-card-partial').innerHTML);
 
@@ -134,7 +133,7 @@ class NoteView {
     bindNewNoteFormSubmit(handler) {
         this.newNoteForm.addEventListener('submit', (event) => {
             event.preventDefault();
-            handler(this.newNoteFormElements.title.value);
+            handler({title: this.newNoteFormElements.title.value});
             this.newNoteFormElements.title.value = null;
         });
     }
@@ -143,7 +142,14 @@ class NoteView {
         this.noteForm.addEventListener('submit', (event) => {
             event.preventDefault();
             const {note, title, description, date, importance} = this.noteFormElements;
-            handler(note.value, title.value, description.value, date.value, importance.value);
+            const dataObj = {
+                ...(note.value ? {id: note.value} : null),
+                ...(title.value ? {title: title.value} : null),
+                ...(description.value ? {description: description.value} : null),
+                ...(date.value ? {date: new Date(date.value)} : null),
+                ...(importance.value ? {importance: +importance.value} : null),
+            };
+            handler(dataObj);
             this.closeFormModal();
         });
     }
@@ -188,11 +194,11 @@ class NoteView {
         }
     }
 
-    openFormModal(note, title, description, date, importance) {
+    openFormModal({note, title, description, date, importance}) {
         this.noteFormElements.note.value = note || null;
         this.noteFormElements.title.value = title || null;
         this.noteFormElements.description.value = description || null;
-        this.noteFormElements.date.value = new Date(date).toLocaleDateString('fr-CA') || null;
+        this.noteFormElements.date.value = date ? formatDate(date) : null;
         this.noteFormElements.importance.value = importance || null;
         this.modal.classList.add('modal-active');
 

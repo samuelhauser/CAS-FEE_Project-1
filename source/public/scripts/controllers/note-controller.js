@@ -36,21 +36,21 @@ class NoteController {
         this.model.switchCompleted(completed);
     }
 
-    handleNewNoteFormSubmit(title) {
-        this.view.openFormModal(null, title);
+    handleNewNoteFormSubmit(data) {
+        this.view.openFormModal(data);
     }
 
-    async handleNoteFormSubmit(id = null, title, description, date, importance) {
-        if (id == null || id.length === 0) {
-            await this.model.createNote(title, description, date, importance);
+    async handleNoteFormSubmit(data) {
+        if (typeof data.id === 'undefined') {
+            await this.model.createNote(data);
         } else {
-            await this.model.updateNote(id, title, description, date, importance);
+            await this.model.updateNote(data);
         }
     }
 
     async handleEditNote(id) {
         const {title, description, date, importance} = await this.model.getNote(id);
-        this.view.openFormModal(id, title, description, date, importance);
+        this.view.openFormModal({note: id, title, description, date, importance});
     }
 
     async handleDeleteNote(id) {

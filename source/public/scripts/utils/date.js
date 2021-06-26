@@ -27,3 +27,10 @@ export const isAfterTomorrow = (someDate) => {
     tomorrow.setHours(0, 0, 0, 0);
     return someDate > tomorrow;
 };
+
+export const formatDate = (date) => {
+    const month = (`0${date.getMonth() + 1}`).slice(-2);
+    const day = date.getDate();
+    const year = date.getFullYear();
+    return [year, month, day].join('-');
+};

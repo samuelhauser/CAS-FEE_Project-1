@@ -9,22 +9,26 @@ export const getNote = async (req, res) => {
 };
 
 export const createNote = async (req, res) => {
-    res.status(200).json((await noteStore.create(
-        req.body.title,
-        req.body.description,
-        req.body.date,
-        req.body.importance,
-    )));
+    const dataObj = {
+        ...(typeof req.body.title === 'undefined' ? null : {title: req.body.title}),
+        ...(typeof req.body.description === 'undefined' ? null : {description: req.body.description}),
+        ...(typeof req.body.date === 'undefined' ? null : {date: new Date(req.body.date)}),
+        ...(typeof req.body.importance === 'undefined' ? null : {importance: req.body.importance}),
+    };
+
+    res.status(200).json(await noteStore.create(dataObj));
 };
 
 export const updateNote = async (req, res) => {
-    res.status(200).json((await noteStore.update(req.params.id, {
-        title: req.body.title || null,
-        description: req.body.description || null,
-        date: req.body.date || null,
-        importance: req.body.importance || null,
-        completed: typeof req.body.completed !== 'undefined' ? req.body.completed : null,
-    })));
+    const dataObj = {
+        ...(typeof req.body.title === 'undefined' ? null : {title: req.body.title}),
+        ...(typeof req.body.description === 'undefined' ? null : {description: req.body.description}),
+        ...(typeof req.body.date === 'undefined' ? null : {date: new Date(req.body.date)}),
+        ...(typeof req.body.importance === 'undefined' ? null : {importance: req.body.importance}),
+        ...(typeof req.body.completed === 'undefined' ? null : {completed: req.body.completed}),
+    };
+
+    res.status(200).json(await noteStore.update(req.params.id, dataObj));
 };
 
 export const deleteNote = async (req, res) => {
