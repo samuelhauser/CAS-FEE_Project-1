@@ -26,7 +26,7 @@ class NoteView {
         this.noteTemplateCompiled = Handlebars.compile(document.getElementById('note-list-template').innerHTML);
 
         this.noteList = document.querySelector('.note-list');
-        this.noteListEmpty = this.noteList.querySelector('.empty-message').outerHTML;
+        this.noteListEmptyMessage = this.noteList.querySelector('.empty-message').outerHTML;
         this.modal = document.querySelector('.modal');
         this.countTotal = document.getElementById('count-total');
         this.countCompleted = document.getElementById('count-completed');
@@ -58,7 +58,7 @@ class NoteView {
         this.noteList.innerHTML = null;
         if (notes.length <= 0) {
             document.body.classList.add('empty-note-list');
-            this.noteList.innerHTML = this.noteListEmpty;
+            this.noteList.innerHTML = this.noteListEmptyMessage;
             return;
         }
 
